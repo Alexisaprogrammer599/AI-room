@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hall Simulation — Text</title>
+  <style>
+    html,body{height:100%; margin:0; background:#000; color:#eaeaea;}
+    .wrap{max-width:900px; margin:0 auto; padding:18px;}
+    h1{font: 600 16px system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:0 0 10px 0;}
+    .mono{font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
+    .log{
+      background:#000;
+      border:1px solid #333;
+      padding:12px;
+      min-height:60vh;
+      white-space:pre-wrap;
+      overflow:auto;
+    }
+    .row{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+    a,button{
+      font: 600 12px system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:#111; color:#eaeaea;
+      border:1px solid #444;
+      padding:8px 10px;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    a:hover,button:hover{border-color:#777;}
+    .hint{opacity:.75; margin-top:10px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Text-only Console</h1>
+    <div class="log mono" id="log"></div>
+    <div class="row">
+      <a href="index.html">Back to graphics</a>
+      <button id="clear">Clear log</button>
+      <button id="copy">Copy log</button>
+    </div>
+    <div class="hint mono">This page reads the same log written by <code>index.html</code> using <code>localStorage</code>.</div>
+  </div>
+
+<script>
+(() => {
+  const logEl = document.getElementById('log');
+  const clearBtn = document.getElementById('clear');
+  const copyBtn = document.getElementById('copy');
+
+  function load() {
+    const s = localStorage.getItem("hall_log") || "AI: (no log yet)\n";
+    logEl.textContent = s;
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  clearBtn.addEventListener('click', () => {
+    localStorage.setItem("hall_log", "");
+    load();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(logEl.textContent);
+      alert("Copied.");
+    } catch {
+      alert("Copy failed (clipboard permissions).");
+    }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
